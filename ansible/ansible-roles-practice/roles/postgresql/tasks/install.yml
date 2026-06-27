@@ -1,0 +1,17 @@
+---
+
+- name: Установка PostgreSQL
+  apt:
+    name: "postgresql-{{ postgresql_version}}"
+    state: present
+
+- name: Установка python3-psycopg2
+  apt:
+    name: python3-psycopg2
+    state: present
+
+- name: Запуск PostgreSQL
+  service:
+    name: postgresql
+    state: started
+    enabled: yes

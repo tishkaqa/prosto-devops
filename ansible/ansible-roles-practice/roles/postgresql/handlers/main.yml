@@ -1,0 +1,11 @@
+---
+
+- name: Перезагрузить postgresql
+  service:
+    name: postgresql
+    state: reloaded
+
+- name: Перезапустить postgresql
+  service:
+    name: postgresql
+    state: restarted

@@ -1,0 +1,26 @@
+---
+
+- name: Создать БД 
+  community.postgresql.postgresql_db:
+    name: "{{ db_name }}"
+    state: present
+  become: yes
+  become_user: postgres
+
+- name: Создать пользователя
+  community.postgresql.postgresql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    db: "{{ db_name }}"
+    state: present
+  become: yes
+  become_user: postgres
+
+- name: Предоставление прав 
+  community.postgresql.postgresql_privs:
+    type: database
+    database: "{{ db_name }}"
+    roles: "{{ db_user }}"
+    privs: ALL
+  become: yes
+  become_user: postgres

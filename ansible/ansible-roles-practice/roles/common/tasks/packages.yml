@@ -1,0 +1,9 @@
+---
+
+- name: Обновление пакета apt cache
+  apt:
+    update_cache: yes
+
+- name: Установка пакетов curl, wget, vim, htop, git, ufw, python3-pip, ntp
+  apt:
+    name: "{{ common_packages }}"

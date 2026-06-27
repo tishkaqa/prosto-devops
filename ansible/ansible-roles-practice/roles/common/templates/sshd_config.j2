@@ -1,0 +1,3 @@
+Port {{ ssh_port }}
+PermitRootLogin {{ 'yes' if ssh_disable_root else 'no' }}
+PasswordAuthentication {{ 'yes' if ssh_password_auth else 'no' }}

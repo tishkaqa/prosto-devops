@@ -1,0 +1,8 @@
+---
+
+- name: База данных
+  hosts: databases
+  become: yes
+  roles:
+    - common
+    - postgresql

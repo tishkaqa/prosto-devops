@@ -1,0 +1,13 @@
+---
+
+- name: Подключаем packages.yml
+  import_tasks: packages.yml
+
+- name: Подключаем users.yml
+  import_tasks: users.yml
+
+- name: Подключаем timezone.yml
+  import_tasks: timezone.yml
+
+- name: Подключаем security.yml
+  import_tasks: security.yml

@@ -1,0 +1,13 @@
+---
+
+- name: Копирование postgresql.conf.j2
+  template:
+    src: postgresql.conf.j2
+    dest: "/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf"
+  notify: Перезагрузить postgresql
+
+- name: Копирование pg_hba.conf.j2
+  template:
+    src: pg_hba.conf.j2
+    dest: "/etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf"
+  notify: Перезагрузить postgresql

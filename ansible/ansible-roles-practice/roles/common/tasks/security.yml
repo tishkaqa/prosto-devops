@@ -1,0 +1,29 @@
+---
+
+- name: Разрешить 22 порт
+  ufw:
+    rule: allow
+    port: "{{ ssh_port }}"
+
+- name: Установка default deny incoming
+  ufw:
+    policy: deny
+    direction: incoming
+
+- name: Включение ufw
+  ufw:
+    state: enabled
+
+- name: копирование template для sshd_config
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+  notify: Перезапустить SSH
+
+- name: Установка unattended-upgrades
+  apt: 
+    name: unattended-upgrades
+    state: present
+
+- name: Запуск unattended-upgrades
+  command: dpkg-reconfigure -f noninteractive unattended-upgrades

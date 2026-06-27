@@ -1,0 +1,19 @@
+---
+
+- name: Создание группы deploy
+  group:
+    name: "{{ deploy_user_groups }}"
+    state: present
+
+- name: Создание пользователя deploy
+  user:
+    name: "{{ deploy_user }}"
+    shell: /bin/bash
+    groups: "{{ deploy_user_groups }}"
+    append: yes
+    state: present
+
+- name: Добавление ssh ключа
+  authorized_key:
+    user: "{{ deploy_user }}"
+    key: "{{ deploy_ssh_key }}"  
