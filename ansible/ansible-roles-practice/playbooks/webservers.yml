@@ -1,0 +1,7 @@
+---
+
+- name: Веб сервер
+  hosts: webservers
+  become: yes
+  roles:
+    - common

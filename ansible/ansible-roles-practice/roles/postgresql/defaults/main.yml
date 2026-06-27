@@ -1,0 +1,8 @@
+postgresql_version: "14"
+postgresql_listen_addresses: "localhost,{{ ansible_default_ipv4.address }}"
+postgresql_max_connections: 100
+
+db_name: myapp_db
+db_user: myapp_user
+db_password: "{{ vault_db_password }}"  # должен быть в vault
+db_host: "{{ ansible_default_ipv4.address }}"

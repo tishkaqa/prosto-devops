@@ -1,0 +1,11 @@
+---
+
+- name: Перезапустить SSH
+  service:
+    name: ssh
+    state: reloaded
+
+- name: Перезапустить ufw
+  service:
+    name: ufw
+    state: reloaded

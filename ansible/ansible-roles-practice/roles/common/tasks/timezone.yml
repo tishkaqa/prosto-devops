@@ -1,0 +1,5 @@
+---
+
+- name: Установка timezone
+  community.general.timezone:
+    name: "{{ timezone }}"
