@@ -1,0 +1,16 @@
+server {
+    listen {{ http_port }};
+    server_name {{ domain_name }};
+
+    root {{ app_directory }};
+    index index.html;
+
+    access_log /var/log/nginx/myapp_access.log;
+    error_log  /var/log/nginx/myapp_error.log;
+
+    location / {
+    proxy_pass http://localhost:{{ app_port }};
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+}
+}

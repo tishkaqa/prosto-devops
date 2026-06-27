@@ -1,0 +1,65 @@
+---
+
+- name: разворачивание веб приложения
+  hosts: webservers
+  vars:
+    app_directory: /var/www/myapp
+    app_user: appuser   
+    app_version: "1.0" 
+    app_port: 5000    
+    http_port: "80"     
+    domain_name: myapp.local 
+
+  tasks:
+    - name: Создание директории для логов
+      file:
+        path: /var/log/myapp
+        state: directory
+        mode: "0755"
+        owner: "{{ app_user }}"
+
+    - name: Копирование файла app.py.j2
+      template:
+        src: app.py.j2
+        dest: "{{ app_directory }}/app.py"
+        mode: "0644"
+    
+    - name: Копирование файлов приложения
+      template:
+        src: myapp.service.j2
+        dest: "/etc/systemd/system/myapp.service"
+      notify: Restart myapp  
+    
+    - name: Установка Flask
+      ansible.builtin.pip:
+        name: flask
+        state: present
+
+    - name: Запуск сервиса
+      service:
+        name: myapp
+        state: started
+        enabled: yes
+
+    - name: Удалить дефолтный конфиг nginx
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: Restart nginx
+
+    - name: Обновить конфиг nginx
+      template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/sites-available/myapp.conf
+      notify: Restart nginx
+
+  handlers:
+    - name: Restart myapp
+      service:
+        name: myapp
+        state: restarted
+
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted

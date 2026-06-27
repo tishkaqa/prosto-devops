@@ -1,0 +1,46 @@
+# ПЛОХОЙ Dockerfile - НЕ ИСПОЛЬЗУЙТЕ В ПРОДЕ!
+# Этот файл содержит все возможные антипаттерны
+
+# ❌ Антипаттерн 1: Использование latest тега
+FROM python:latest
+
+# ❌ Антипаттерн 2: Запуск от root пользователя (нет USER)
+# ❌ Антипаттерн 3: Не используется WORKDIR
+
+# ❌ Антипаттерн 4: Копирование всего контекста (включая .git, кэши, т.д.)
+COPY . /app
+
+# ❌ Антипаттерн 5: Установка зависимостей без очистки кэша
+RUN apt-get update
+RUN apt-get install -y curl
+RUN apt-get install -y wget
+RUN apt-get install -y vim
+RUN apt-get install -y git
+RUN apt-get install -y build-essential
+
+# ❌ Антипаттерн 6: Много отдельных RUN команд (каждая = новый слой)
+RUN pip install requests
+RUN pip install flask
+RUN pip install pytest
+RUN pip install black
+
+# ❌ Антипаттерн 7: Не используется .dockerignore
+
+# ❌ Антипаттерн 8: Нет порядка копирования (сначала код, потом зависимости)
+# Это ломает кэш при любом изменении кода
+
+# ❌ Антипаттерн 9: Устанавливаются dev-зависимости в продакшн образе
+
+# ❌ Антипаттерн 10: Секреты в ENV
+ENV DATABASE_PASSWORD=super_secret_password_123
+ENV API_KEY=sk-1234567890abcdef
+
+# ❌ Антипаттерн 11: Нет healthcheck
+
+# ❌ Антипаттерн 12: Используется shell форма CMD (не exec)
+CMD python /app/app.py
+
+# ❌ Антипаттерн 13: Нет metadata (LABEL)
+# ❌ Антипаттерн 14: Не указан EXPOSE
+# ❌ Антипаттерн 15: Нет оптимизации слоев
+# ❌ Антипаттерн 16: Большой базовый образ (не alpine/slim)

@@ -1,0 +1,60 @@
+➜  ansible-practice git:(new_main) ✗ # Всё из раздела "Проверка работы"
+docker exec linux-container-1 curl -s http://localhost/
+docker exec linux-container-1 curl -s http://localhost:9100/metrics | head -5
+docker exec linux-container-1 systemctl status nginx
+docker exec linux-container-1 systemctl status node_exporter
+
+    <html>
+        <body>
+            <h1>My App v1.0</h1>
+            <p>Deployed with Ansible!</p>
+        </body>
+    </html>
+    # HELP go_gc_duration_seconds A summary of the pause duration of garbage collection cycles.
+# TYPE go_gc_duration_seconds summary
+go_gc_duration_seconds{quantile="0"} 1.6794e-05
+go_gc_duration_seconds{quantile="0.25"} 1.6794e-05
+go_gc_duration_seconds{quantile="0.5"} 1.6794e-05
+● nginx.service - A high performance web server and a reverse proxy server
+     Loaded: loaded (/lib/systemd/system/nginx.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sat 2026-06-27 05:42:05 UTC; 3min 12s ago
+       Docs: man:nginx(8)
+    Process: 51 ExecStartPre=/usr/sbin/nginx -t -q -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+    Process: 84 ExecStart=/usr/sbin/nginx -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+   Main PID: 86 (nginx)
+      Tasks: 9 (limit: 2819)
+     Memory: 18.4M
+        CPU: 69ms
+     CGroup: /system.slice/docker-57c3485e9a20835a3f9ff4553d19f02ce06f5a6596e377a22186ae8c5a7d43d9.scope/system.slice/nginx.service
+             ├─86 "nginx: master process /usr/sbin/nginx -g daemon on; master_process on;"
+             ├─87 "nginx: worker process" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+             ├─88 "nginx: worker process" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+             ├─89 "nginx: worker process" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+             ├─90 "nginx: worker process" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+             ├─91 "nginx: worker process" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+             ├─92 "nginx: worker process" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+             ├─93 "nginx: worker process" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+             └─94 "nginx: worker process" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""
+
+Jun 27 05:42:05 linux-1 systemd[1]: Starting A high performance web server and a reverse proxy server...
+Jun 27 05:42:05 linux-1 systemd[1]: Started A high performance web server and a reverse proxy server.
+● node_exporter.service - Node Exporter
+     Loaded: loaded (/etc/systemd/system/node_exporter.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sat 2026-06-27 05:42:05 UTC; 3min 12s ago
+   Main PID: 52 (node_exporter)
+      Tasks: 5 (limit: 2819)
+     Memory: 17.8M
+        CPU: 58ms
+     CGroup: /system.slice/docker-57c3485e9a20835a3f9ff4553d19f02ce06f5a6596e377a22186ae8c5a7d43d9.scope/system.slice/node_exporter.service
+             └─52 /opt/node_exporter
+
+Jun 27 05:42:05 linux-1 node_exporter[52]: ts=2026-06-27T05:42:05.609Z caller=node_exporter.go:117 level=info collector=thermal_zone
+Jun 27 05:42:05 linux-1 node_exporter[52]: ts=2026-06-27T05:42:05.609Z caller=node_exporter.go:117 level=info collector=time
+Jun 27 05:42:05 linux-1 node_exporter[52]: ts=2026-06-27T05:42:05.609Z caller=node_exporter.go:117 level=info collector=timex
+Jun 27 05:42:05 linux-1 node_exporter[52]: ts=2026-06-27T05:42:05.609Z caller=node_exporter.go:117 level=info collector=udp_queues
+Jun 27 05:42:05 linux-1 node_exporter[52]: ts=2026-06-27T05:42:05.609Z caller=node_exporter.go:117 level=info collector=uname
+Jun 27 05:42:05 linux-1 node_exporter[52]: ts=2026-06-27T05:42:05.609Z caller=node_exporter.go:117 level=info collector=vmstat
+Jun 27 05:42:05 linux-1 node_exporter[52]: ts=2026-06-27T05:42:05.609Z caller=node_exporter.go:117 level=info collector=xfs
+Jun 27 05:42:05 linux-1 node_exporter[52]: ts=2026-06-27T05:42:05.609Z caller=node_exporter.go:117 level=info collector=zfs
+Jun 27 05:42:05 linux-1 node_exporter[52]: ts=2026-06-27T05:42:05.611Z caller=tls_config.go:274 level=info msg="Listening on" address=[::]:9100
+Jun 27 05:42:05 linux-1 node_exporter[52]: ts=2026-06-27T05:42:05.612Z caller=tls_config.go:277 level=info msg="TLS is disabled." http2=false address=[::]:9100

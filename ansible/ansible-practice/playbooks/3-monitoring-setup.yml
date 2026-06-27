@@ -1,0 +1,54 @@
+---
+- name: Настройка мониторинга
+  hosts: webservers
+  vars:
+    node_exporter_version: "1.7.0"
+    prometheus_server_ip: "192.168.1.100"
+  tasks:
+    - name: Создать пользователя node_exporter
+      user:
+        name: node_exporter
+        shell: /sbin/nologin
+        create_home: no
+
+    - name: Скачать Node Exporter
+      get_url:
+        url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+        dest: "/tmp/node_exporter.tar.gz"
+
+    - name: Распаковать Node Exporter
+      unarchive:
+        src: "/tmp/node_exporter.tar.gz"
+        dest: "/opt/"
+        remote_src: yes
+        extra_opts:
+          - --strip-components=1
+
+    - name: Скопировать systemd сервис
+      template:
+        src: node_exporter.service.j2
+        dest: /etc/systemd/system/node_exporter.service
+      notify: Restart node_exporter
+
+    - name: Открыть порт 9100 в UFW
+      community.general.ufw:
+        rule: allow
+        port: "9100"
+        src: "{{ prometheus_server_ip }}"
+
+    - name: Запустить node_exporter
+      service:
+        name: node_exporter
+        state: started
+        enabled: yes
+
+    - name: Проверить метрики
+      uri:
+        url: http://localhost:9100/metrics
+        status_code: 200
+
+  handlers:
+    - name: Restart node_exporter
+      service:
+        name: node_exporter
+        state: restarted

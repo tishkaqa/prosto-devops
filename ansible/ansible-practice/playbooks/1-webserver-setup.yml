@@ -1,0 +1,79 @@
+---
+
+- name: Настрока веб сервера
+  hosts: linux-container-1
+  vars:
+    app_user: appuser
+    app_directory: /var/www/myapp
+    domain_name: myapp.local
+    ssh_port: "22"
+    http_port: "80"
+  
+  tasks:
+    - name: Обновить пакеты
+      apt:
+        update_cache: yes
+
+    - name: Установить nginx, ufw, python3-pip
+      apt:
+        name: 
+          - nginx
+          - ufw
+          - python3-pip
+        state: present
+
+    - name: Добавить пользователя
+      user:
+        name: "{{ app_user }}"
+
+    - name: Создание директории
+      file:
+        path: "{{ app_directory }}"
+        state: directory
+        mode: "0755"
+        owner: "{{ app_user }}"
+
+    - name: Разрешить SSH
+      community.general.ufw:
+        rule: allow
+        port: "{{ ssh_port }}"
+
+    - name: Разрешить HTTP
+      community.general.ufw:
+        rule: allow
+        port: "{{ http_port }}"
+
+    - name: Включить UFW
+      community.general.ufw:
+        state: enabled
+
+    - name: Копирование конфига nginx на сервера
+      template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/sites-available/myapp.conf
+      notify: Restart nginx  
+
+    - name: Создание симлинка для конфига
+      file:
+        src: /etc/nginx/sites-available/myapp.conf
+        dest: /etc/nginx/sites-enabled/myapp.conf
+        state: link
+
+    - name: Запустить nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Проверка запуска nginx
+      uri:
+        url: http://localhost
+        status_code: 200
+
+  handlers:
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted
+
+    
